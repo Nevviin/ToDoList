@@ -1,35 +1,37 @@
 import { useState, useEffect } from "react";
 import ToDoView from './ToDoView';
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import allActions from './redux/actions';
-
+import * as toDoService from "./toDoService";
 function App() {
   const dispatch = useDispatch();
-
-  const [toDoList,setToDoList] =useState(
-  [
-    {key:1, id:1, name:'TODO1', isSelected:true},
-    {key:2, id:2, name:'TODO2', isSelected:false},
-    {key:3, id:3, name:'TODO3', isSelected:false},
-    {key:4, id:4, name:'TODO4', isSelected:false}
-  ]);
-
-
- 
+  const todoListAll = useSelector((state) => state.ToDoListReducer.toDoList);
+  const [todoList,setTodoList] = useState(todoListAll);
+  const[showList,setShowList]=useState(false);
   useEffect(()=>{
-    dispatch(allActions.toDoListActions.setToDoList(toDoList));
+    getTodos();
   },[]);
 
 
-  return (
-    
-    <div className="container-sm">
+const getTodos =()=>
+{
+  toDoService.FetchToDoList().then((response)=>{
+    if (response.status === 200) {
+     // dispatch(allActions.toDoListActions.setToDoList(updatedToDoList));
+     dispatch(allActions.toDoListActions.setToDoList(response.data))
+      console.log('response.data',response.data);
+      setShowList(true);
+    }
+  })
 
-    <ToDoView key={1} toDoList={toDoList} />
-
-    </div>
-
-  );
 }
 
+
+
+  return (
+    <div className="container-sm">
+     {showList &&   <ToDoView  toDoList={todoList} />}
+    </div>
+  );
+}
 export default App;
