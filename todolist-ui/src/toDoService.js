@@ -52,3 +52,19 @@ export const AddItem = async (toDoItem) => {
       return exception.response;
   }
 }
+
+
+export const DeleteItem = async (toDoItem) => {
+  console.log('toDoService DeleteItem toDoItem.id',toDoItem.id);
+  console.log('toDoService delete url',`http://localhost:60634/api/todo?id=${toDoItem.id}`);
+  try {
+      const response = await axios.delete(`http://localhost:60634/api/todo?id=${toDoItem.id}`);
+      return response;
+  } catch (exception) {
+      if (!exception.response) {
+          console.log('toDoService delete exception', exception);
+          return exception;
+      }
+      return exception.response;
+  }
+}

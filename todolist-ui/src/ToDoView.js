@@ -15,11 +15,17 @@ const ToDoView = () => {
   const [newTask,setNewTask]=useState('');
   console.log("ToDoView toDoList",toDoList);
 
-/* useEffect(()=>{
-  setToDoList([]);
-  setToDoList(toDoList);
-},[to *//* DoList]);
- */
+  const deleteToDo =(toDo)=>
+  {
+    
+    toDoService.DeleteItem(toDo).then((response)=>{
+      if (response.status === 200) {
+        setToDoList(response.data);
+       dispatch(allActions.toDoListActions.setToDoList(response.data))
+        console.log('response.data',response.data);
+      }
+    })
+  }
 
   const handleKeyPress = (e) => {
     console.log("e.keyCode",e.keyCode);
@@ -57,12 +63,7 @@ const addTaskHandler = () => {
     }
   })
 
-
-
-  /* newToDoListState.push(task);
-  seToDoList(newToDoListState);
-  dispatch(allActions.toDoListActions.setToDoList(newToDoListState));
-  console.log(newToDoListState); */
+ 
 };
 
 
@@ -111,7 +112,7 @@ setNewTask(e.target.value);
         <div key={1}>
           {toDoList.map((todo) => {
             console.log('todo.map',todo);
-            return <ToDo toDoProp={todo} />;
+            return <ToDo toDoProp={todo} onDelete ={deleteToDo} />;
           })}
         </div>
         <div>

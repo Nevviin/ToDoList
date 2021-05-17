@@ -12,36 +12,39 @@ namespace ToDoList.Api.Controllers
     [ApiController]
     public class ToDoController : ControllerBase
     {
-        public ToDoController()
+       private ToDoInMemoryContext _toDoInMemoryContext;
+        public ToDoController(ToDoInMemoryContext toDoInMemoryContext)
         {
-
+            _toDoInMemoryContext = toDoInMemoryContext;
         }
 
         [HttpGet]
         public ActionResult<List<ToDo>> GetTodoList()
         {
 
-          var toDoList =  new List<ToDo> { new ToDo 
-            { CreatedDate = DateTime.Today,
-                Id = 1, 
-                IsCompleted = false, 
-                Item = "Weekend Trekking" }
-            };
-            return Ok(toDoList);
+            var toDolist = _toDoInMemoryContext.ToDos.Select(x => x).ToList();
+            return Ok(toDolist);
         }
-
 
 
         [HttpPost]
         public ActionResult<List<ToDo>> AddItem(ToDo toDo)
         {
-            var toDoList = new List<ToDo> { new ToDo
-            { CreatedDate = DateTime.Today,
-                Id = 1,
-                IsCompleted = false,
-                Item = "Weekend Trekking" }
-            };
-            return Ok(toDoList);
+            _toDoInMemoryContext.ToDos.Add(toDo);
+            _toDoInMemoryContext.SaveChanges();
+            var toDolist = _toDoInMemoryContext.ToDos.Select(x => x).ToList();
+            return Ok(toDolist);
+        }
+
+
+        [HttpDelete]
+        public ActionResult<List<ToDo>> Delete(int id)
+        {
+            var toDo = _toDoInMemoryContext.ToDos.Where(x => x.Id == id).FirstOrDefault();
+            _toDoInMemoryContext.ToDos.Remove(toDo);
+            _toDoInMemoryContext.SaveChanges();
+            var toDolist = _toDoInMemoryContext.ToDos.Select(x => x).ToList();
+            return Ok(toDolist);
         }
     }
 }

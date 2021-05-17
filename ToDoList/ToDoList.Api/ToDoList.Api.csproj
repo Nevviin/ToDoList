@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="microsoft.entityframeworkcore.inmemory" Version="5.0.6" />
     <PackageReference Include="swashbuckle.aspnetcore" Version="6.1.4" />
   </ItemGroup>
 
