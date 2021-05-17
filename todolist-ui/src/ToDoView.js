@@ -39,16 +39,18 @@ const ToDoView = () => {
 const addTaskHandler = () => {
   console.log('newTask',newTask);
   var newToDoListState = [...toDoListState];
-  var lastTask = toDoListState.slice(-1);
+  
   if (!newTask.trim())
   {
     alert('please enter the task');
     return false;
   }
+
+  var lastTask = (toDoListState.length<1)?1:toDoListState.slice(-1);
   console.log("last task", lastTask);
   var task = {
-    id: Number(lastTask[0].id) + 1,
-    key: Number(lastTask[0].id) + 1,
+    id:  (toDoListState.length<1)?1:Number(lastTask[0].id) + 1,
+    key: (toDoListState.length<1)?1:Number(lastTask[0].id) + 1,
     item: newTask,
     isSelected: false,
     isCompleted:false

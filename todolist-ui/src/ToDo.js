@@ -15,7 +15,7 @@ const DeleteHandler = (id)=>{
 var deleteItem = todoListAll.find(toDoItem => {
   return toDoItem.id === id.id;
 });
-alert(JSON.stringify(deleteItem));
+//alert(JSON.stringify(deleteItem));
 props.onDelete(deleteItem);
 }
 
